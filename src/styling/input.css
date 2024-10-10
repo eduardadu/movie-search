@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root {
+  background-color: #f8f8f8;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 200;
+  font-size: 14px;
+  line-height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  height: 100vh;
+  color: #171717;
+}
+
+input {
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+::-moz-selection {
+  color: #171717;
+  background: #fde047;
+}
+
+::selection {
+  color: #171717;
+  background: #fde047;
+}
