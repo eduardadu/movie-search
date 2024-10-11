@@ -2,6 +2,11 @@
 module.exports = {
   content: ['./src/**/*.{html,js}'],
   theme: {
+    fontFamily: {
+      sans: ['Public Sans', 'sans-serif'],
+      bold: ['Public Sans', 'bold'],
+      mono: ['Space Mono', 'monospace']
+    },
     extend: {
       colors: {
         'light-1': '#FCFCFC',
