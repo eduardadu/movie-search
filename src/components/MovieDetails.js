@@ -27,7 +27,7 @@ function MovieDetails({ movieData }) {
 
   return (
     <>
-      <div className="mr-6 flex w-[240px] flex-col overflow-hidden">
+      <div className="mr-8 flex w-[240px] flex-col overflow-hidden">
         {imgLoad && Poster ? (
           <img src={Poster} alt="imdb" className="w-fill self-start rounded-lg" onError={() => setImgLoad(false)} />
         ) : (
@@ -35,13 +35,13 @@ function MovieDetails({ movieData }) {
         )}
         <div
           id="rating"
-          className="mt-8 flex cursor-pointer items-baseline justify-between rounded-lg bg-yellow-500 px-[16px] py-[12px] text-center text-white drop-shadow-16y"
+          className="mt-4 flex cursor-pointer items-baseline justify-between rounded-lg bg-yellow-500 px-[16px] py-[12px] text-center text-white drop-shadow-16y"
           onClick={handleIMDBClick}
         >
           <img className="h-[16px]" src="../images/imdb.svg" alt="imdb" />
           <span className="flex">
-            <span className="text-center text-[18px] font-bold text-light-12">{imdbRating} </span>
-            <span className="align-text-top text-[10px] leading-none text-light-12"> ({imdbVotes} votes)</span>
+            <span className="mr-1 text-center text-[18px] font-bold text-light-12">{imdbRating} </span>
+            <span className="leading-none text-light-12"> ({imdbVotes} votes)</span>
           </span>
         </div>
       </div>
