@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import QuerySuggestions from './QuerySuggestions';
+import { fetchMoviesByTitle } from '../helpers/fetch';
 
 function SearchBar({ query, handleSubmit, handleInputChange }) {
   const [suggestions, setSuggestions] = useState(false);
   const [suggestionsList, setSuggestionsList] = useState([]);
   const [searchQuery, setSearchQuery] = useState(query);
+  const [searchState, setSearchState] = useState('EMPTY');
 
   const querySuggestions = () =>
-    suggestionsList.length > 0 && (
+    suggestionsList?.length > 0 &&
+    searchState !== 'LOADING' && (
       <QuerySuggestions
         suggestions={suggestionsList}
         handleClick={handleSubmit}
@@ -27,25 +30,7 @@ function SearchBar({ query, handleSubmit, handleInputChange }) {
   };
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await fetch(
-          `https://www.omdbapi.com/?apikey=30cb209&s=${searchQuery}`
-        );
-        const data = await response.json();
-        if (data.Response === 'True') {
-          setSuggestionsList(data.Search);
-          return data.Search;
-        } else {
-          setSuggestionsList([]);
-          return [];
-        }
-      } catch (error) {
-        setSuggestionsList([]);
-        throw new Error('Failed to fetch movies');
-      }
-    };
-    fetchMovies();
+    fetchMoviesByTitle(searchQuery, setSearchState, setSuggestionsList);
   }, [searchQuery]);
 
   return (
@@ -65,7 +50,7 @@ function SearchBar({ query, handleSubmit, handleInputChange }) {
       {suggestions && searchQuery && querySuggestions()}
       <button
         type="submit"
-        className="absolute right-0 top-0 z-10 h-full rounded bg-light-5 px-[12px] transition peer-focus:bg-yellow-300"
+        className="absolute right-0 top-0 z-10 h-full rounded bg-light-5 px-[12px] transition hover:bg-yellow-300 peer-focus:bg-yellow-300"
       >
         <img src="./images/search.svg" alt="search" />
       </button>

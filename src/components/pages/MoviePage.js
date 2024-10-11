@@ -2,97 +2,63 @@ import React, { useState, useEffect } from 'react';
 import '../../styling/output.css';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { useLikes } from '../LikesContext';
+import { useLikes } from '../context/LikesContext';
+import { fetchMoviesByID } from '../../helpers/fetch';
+import MovieDetails from '../MovieDetails';
 
 function MoviePage() {
   const { id } = useParams();
 
-  const [movieData, setMovieData] = useState([]);
   const [searchState, setSearchState] = useState('EMPTY');
   const { likes, handleSetLikes } = useLikes();
   const isLiked = likes.includes(id);
+  const [movieData, setMovieData] = useState(null);
 
   const handleLikeClick = () => {
     handleSetLikes(id);
   };
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      setSearchState('LOADING');
-      try {
-        const response = await fetch(
-          `https://www.omdbapi.com/?apikey=30cb209&i=${id}`
-        );
-        const data = await response.json();
-        if (data.Response === 'True') {
-          setMovieData(data);
-          console.log(data);
-          setSearchState('SUCCESS');
-          return data.Search;
-        } else {
-          setMovieData(data);
-          setSearchState('NOT_FOUND');
-          return [];
-        }
-      } catch (error) {
-        setSearchState('ERROR');
-        throw new Error('Failed to fetch movies');
-      }
-    };
-    fetchMovies();
+    fetchMoviesByID(id, setSearchState, setMovieData);
   }, [id]);
-
-  const likeIcon = (
-    <button onClick={handleLikeClick} className="absolute right-0 w-[32px]">
-      {isLiked ? (
-        <img
-          className="w-full"
-          src="./../images/favorite_fill.svg"
-          alt="liked"
-        />
-      ) : (
-        <img className="w-full" src="./../images/favorite.svg" alt="addLike" />
-      )}
-    </button>
-  );
 
   return (
     <div>
-      <Link to={`/`}>
-        <div className="relative">Go Back</div>
+      <Link to={`/`} id="return">
+        <div className=":bg-yellow-400 relative flex h-[40px] w-[140px] flex-row rounded-lg border-2 border-light-5 bg-light-1 px-[16px] py-[8px] hover:border-yellow-300 hover:bg-yellow-300">
+          <img className="w-[24px]" src="../images/arrow_back.svg" alt="arrowBack" />
+          <button className="mx-2 text-[1rem] leading-none text-light-10">Return</button>
+        </div>
       </Link>
 
       <div
         id="moviesWrapper"
         className="mt-[16px] flex h-[580px] w-[770px] justify-center overflow-y-scroll rounded-lg border-2 border-light-5 bg-light-1 p-6 drop-shadow-16y"
       >
-        {searchState === 'LOADING' && <div>loading...</div>}
-        {searchState === 'SUCCESS' && movieData && (
-          <div
-            id="movieProfile"
-            className="relative flex w-full flex-row justify-start align-middle"
-          >
-            <img
-              src={movieData.Poster}
-              alt="imdb"
-              className="mr-6 w-[240px] self-start rounded-lg"
-            />
-            <div id="infos" className="flex flex-col">
-              <h1 className="text-4xl font-bold text-yellow-500">
-                {movieData.Title}
-              </h1>
-              <span className="font-mono text-xl text-yellow-500">
-                ({movieData.Year})
-              </span>
-              <span className="">{movieData.imdbRating} on IMDB</span>
-              <p className="text-s w-[400px] text-light-12">{movieData.Plot}</p>
-            </div>
-
-            {likeIcon}
+        {searchState === 'LOADING' && (
+          <div id="movieProfile" className="align-middl relative flex w-full flex-row justify-start">
+            <MovieDetails />
+            <button className="absolute right-0 w-[32px]" id="like"></button>
           </div>
         )}
-        {searchState === 'NOT_FOUND' && <div>Movie Data not found</div>}
-        {searchState === 'ERROR' && <div>An error has ocurred.</div>}
+        {searchState === 'SUCCESS' && movieData && (
+          <div id="movieProfile" className="align-middl relative flex w-full flex-row justify-start">
+            <MovieDetails movieData={movieData} />
+            <button onClick={handleLikeClick} className="absolute right-0 w-[32px]" id="like">
+              <img
+                className="w-full"
+                src={isLiked ? './../images/favorite_fill.svg' : './../images/favorite.svg'}
+                alt={isLiked ? 'liked' : 'addLike'}
+              />
+            </button>
+          </div>
+        )}
+        {searchState === 'NOT_FOUND' && (
+          <div className="mt-8 text-xl text-gray-400">We could not find this movie :(</div>
+        )}
+        {searchState === 'ERROR' && (
+          <div className="mt-8 text-xl text-gray-400">An error has ocurred. Please try again.</div>
+        )}
       </div>
     </div>
   );

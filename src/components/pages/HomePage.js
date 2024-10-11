@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../../styling/output.css';
 import SearchBar from '../SearchBar';
-import MovieGrid from '../MovieGrid';
+import Grid from '../Grid';
+import { fetchMoviesByTitle } from '../../helpers/fetch';
 
 function HomePage({ apiKey, query, setQuery }) {
   const [movieList, setMovieList] = useState([]);
@@ -13,28 +14,9 @@ function HomePage({ apiKey, query, setQuery }) {
   };
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      setSearchState('LOADING');
-      try {
-        const response = await fetch(
-          `https://www.omdbapi.com/?apikey=30cb209&s=${query}`
-        );
-        const data = await response.json();
-        if (data.Response === 'True') {
-          setMovieList(data.Search);
-          setSearchState('SUCCESS');
-          return data.Search;
-        } else {
-          setMovieList(data.Search);
-          setSearchState('NOT_FOUND');
-          return [];
-        }
-      } catch (error) {
-        setSearchState('ERROR');
-        throw new Error('Failed to fetch movies');
-      }
-    };
-    query ? fetchMovies() : setSearchState('EMPTY');
+    query
+      ? fetchMoviesByTitle(query, setSearchState, setMovieList)
+      : setSearchState('EMPTY');
   }, [query, apiKey]);
 
   return (
@@ -49,7 +31,7 @@ function HomePage({ apiKey, query, setQuery }) {
             movieList
           }}
         />
-        <MovieGrid key="movie-grid" {...{ movieList, searchState }} />
+        <Grid key="movie-grid" {...{ movieList, searchState }} />
       </div>
     </>
   );
