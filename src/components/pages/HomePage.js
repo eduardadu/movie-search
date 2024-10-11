@@ -14,14 +14,12 @@ function HomePage({ apiKey, query, setQuery }) {
   };
 
   useEffect(() => {
-    query
-      ? fetchMoviesByTitle(query, setSearchState, setMovieList)
-      : setSearchState('EMPTY');
+    query ? fetchMoviesByTitle(query, setSearchState, setMovieList) : setSearchState('EMPTY');
   }, [query, apiKey]);
 
   return (
     <>
-      <div className="">
+      <div>
         <SearchBar
           key="search-bar"
           {...{

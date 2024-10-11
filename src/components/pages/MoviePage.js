@@ -22,6 +22,37 @@ function MoviePage() {
     fetchMoviesByID(id, setSearchState, setMovieData);
   }, [id]);
 
+  const renderContent = () => {
+    switch (searchState) {
+      case 'LOADING':
+        return (
+          <div id="movieProfile" className="relative flex w-full flex-row justify-start">
+            <MovieDetails />
+            <button onClick={handleLikeClick} className="absolute right-0 w-[32px]" id="like"></button>
+          </div>
+        );
+      case 'SUCCESS':
+        return (
+          <div id="movieProfile" className="relative flex w-full flex-row justify-start">
+            <MovieDetails movieData={movieData} />
+            <button onClick={handleLikeClick} className="absolute right-0 w-[32px]" id="like">
+              <img
+                className="w-full"
+                src={isLiked ? './../images/favorite_fill.svg' : './../images/favorite.svg'}
+                alt={isLiked ? 'liked' : 'addLike'}
+              />
+            </button>
+          </div>
+        );
+      case 'NOT_FOUND':
+        return <div className="mt-8 text-xl text-gray-400">We could not find this movie :(</div>;
+      case 'ERROR':
+        return <div className="mt-8 text-xl text-gray-400">An error has occurred. Please try again.</div>;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div>
       <Link to={`/`} id="return">
@@ -35,30 +66,7 @@ function MoviePage() {
         id="moviesWrapper"
         className="mt-[16px] flex h-[580px] w-[770px] justify-center overflow-y-scroll rounded-lg border-2 border-light-5 bg-light-1 p-6 drop-shadow-16y"
       >
-        {searchState === 'LOADING' && (
-          <div id="movieProfile" className="align-middl relative flex w-full flex-row justify-start">
-            <MovieDetails />
-            <button className="absolute right-0 w-[32px]" id="like"></button>
-          </div>
-        )}
-        {searchState === 'SUCCESS' && movieData && (
-          <div id="movieProfile" className="align-middl relative flex w-full flex-row justify-start">
-            <MovieDetails movieData={movieData} />
-            <button onClick={handleLikeClick} className="absolute right-0 w-[32px]" id="like">
-              <img
-                className="w-full"
-                src={isLiked ? './../images/favorite_fill.svg' : './../images/favorite.svg'}
-                alt={isLiked ? 'liked' : 'addLike'}
-              />
-            </button>
-          </div>
-        )}
-        {searchState === 'NOT_FOUND' && (
-          <div className="mt-8 text-xl text-gray-400">We could not find this movie :(</div>
-        )}
-        {searchState === 'ERROR' && (
-          <div className="mt-8 text-xl text-gray-400">An error has ocurred. Please try again.</div>
-        )}
+        {renderContent()}
       </div>
     </div>
   );

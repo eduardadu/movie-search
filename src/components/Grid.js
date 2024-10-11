@@ -7,7 +7,7 @@ function Grid({ movieList, searchState }) {
       <Tile title={movie.Title} poster={movie.Poster} imdbID={movie.imdbID} year={movie.Year} key={movie.imdbID} />
     ));
 
-  const createDummyList = () => movieList?.map((movie, index) => <Tile key={index} />);
+  const createDummyList = () => Array.from({ length: 4 }, (_, index) => <Tile key={index} />);
 
   const searchResult = () => {
     switch (searchState) {

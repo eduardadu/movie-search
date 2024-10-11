@@ -8,7 +8,7 @@ The overall logic of the features respected the defined time.
 
 This project used React + Tailwind (css is a bit messy due to time constraints)
 
-¯\_( ͡❛ *>͡❛ )*/¯
+( ͡❛ ͜ʖ ͡❛)
 
 ## Available Scripts
 

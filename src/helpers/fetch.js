@@ -1,16 +1,9 @@
-export const fetchMoviesByID = async (
-  movieId,
-  setSearchState,
-  setMovieData
-) => {
+export const fetchMoviesByID = async (movieId, setSearchState, setMovieData) => {
   setSearchState('LOADING');
   try {
-    const response = await fetch(
-      `https://www.omdbapi.com/?apikey=30cb209&i=${movieId}`
-    );
+    const response = await fetch(`https://www.omdbapi.com/?apikey=30cb209&i=${movieId}`);
     const data = await response.json();
     if (data.Response === 'True') {
-      console.log(data);
       setMovieData(data);
       setSearchState('SUCCESS');
     } else {
@@ -22,16 +15,10 @@ export const fetchMoviesByID = async (
   }
 };
 
-export const fetchMoviesByTitle = async (
-  query,
-  setSearchState,
-  setMovieList
-) => {
+export const fetchMoviesByTitle = async (query, setSearchState, setMovieList) => {
   setSearchState('LOADING');
   try {
-    const response = await fetch(
-      `https://www.omdbapi.com/?apikey=30cb209&s=${query}`
-    );
+    const response = await fetch(`https://www.omdbapi.com/?apikey=30cb209&s=${query}`);
     const data = await response.json();
     if (data.Response === 'True') {
       setMovieList(data.Search);
