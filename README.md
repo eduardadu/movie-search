@@ -1,4 +1,4 @@
-# Significa Front-end Challenge: Movie Search
+# Movie Search
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).\
 It fetches data from [OMDb API](https://www.omdbapi.com/).
